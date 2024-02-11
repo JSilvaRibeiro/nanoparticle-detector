@@ -1,16 +1,39 @@
 import tkinter as tk
 from tkinter import filedialog
+import cv2
+from skimage import measure
 
 def detect_particles():
     # Placeholder function for particle detection
     print("Detecting particles...")
 
 def upload_image():
-    # Open a file dialog to select an image file
-    file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg")])
-    if file_path:
+    try:
+        # Open a file dialog to select an image file
+        file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.png;*.jpg;*.jpeg")])
         print("Selected file:", file_path)
-        # Perform further processing with the selected image file
+        if file_path:
+            print("Selected file:", file_path)
+            
+            # Perform image processing on the selected image file
+            image = cv2.imread(file_path)
+            gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            _, binary_image = cv2.threshold(gray_image, 128, 255, cv2.THRESH_BINARY)
+            labels = measure.label(binary_image, connectivity=2)
+            regions = measure.regionprops(labels)
+            for region in regions:
+                area = region.area
+                perimeter = region.perimeter
+                # Extract other features as needed
+            
+            # Display the segmented image (optional)
+            cv2.imshow('Segmented Image', binary_image)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
+            
+    except Exception as e:
+        print("An error occurred:", e)
+    
 
 # Create the main window
 root = tk.Tk()

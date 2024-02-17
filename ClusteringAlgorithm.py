@@ -4,12 +4,20 @@ from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 from sklearn.cluster import DBSCAN
 from sklearn.cluster import HDBSCAN
-from sklearn import metrics
 from random import randint
 from sklearn.neighbors import NearestNeighbors
 
 
+# Plot a graph showing the optimal value of the eps parameter for the DBSCAN algorithm using the distance to each point k-nearest neighbors
+# Input: X -> An array of points
+#        k -> Amount of nearest neighbors to use. Equal to 2 * dimension of dataset - 1
+#        radius_nbrs -> Range of parameter space to use
+# Output: A plot showing the sorted K-nearest neighbor distance for each dataset point
+# Improvements: Find a way to return the optimal value shown on the plot for use in the DBSCAN algorithm in the main function
+
+
 def get_kdist_plot(X=None, k=None, radius_nbrs=1.0):
+
     nbrs = NearestNeighbors(n_neighbors=k, radius=radius_nbrs).fit(X)
 
     # For each point, compute distances to its k-nearest neighbors
@@ -26,6 +34,15 @@ def get_kdist_plot(X=None, k=None, radius_nbrs=1.0):
     plt.grid(True, linestyle="--", color='black', alpha=0.4)
     plt.show()
     plt.close()
+
+# Make the plot for the results of the HDBSCAN clustering algorithm
+# Input: X -> An array of points
+#        labels -> An array of predicted clusters that each point belongs to.
+#        probabilities -> Array of values that contain the probability that a point belongs to a specific cluster (Optional)
+#        parameters -> Array of parameters that would be added on to the plot (Optional)
+#        ground_truth -> Boolean that controls whether the text says "True number of clusters" or "Estimated number of clusters" (Optional)
+#        ax -> A pyplot that can be passed if different plot attributes are needed (Optional)
+# Output: A plot that shows the results of the HDBSCAN algorithm including probability of a point belonging to a cluster
 
 
 def plot(X, labels, probabilities=None, parameters=None, ground_truth=False, ax=None):
@@ -64,19 +81,20 @@ def plot(X, labels, probabilities=None, parameters=None, ground_truth=False, ax=
     plt.tight_layout()
 
 
-X, labels_true = make_blobs(n_samples = 350, centers = 350, cluster_std = 0.8, random_state = 0)  # randint(0,300))
+# Make a dummy dataset of points for the algorithm
+X, labels_true = make_blobs(n_samples = 350, centers = 350, cluster_std = 0.8, random_state = 0)
 X = StandardScaler().fit_transform(X)
 
 plt.scatter(X[:, 0], X[:, 1])
 plt.show()
 
-k = 2 * X.shape[-1] - 1 # k=2*{dim(dataset)} - 1
+# Find k-nearest neighbors where k = 2 * {dim(dataset)} - 1
+k = 2 * X.shape[-1] - 1
 get_kdist_plot(X=X, k=k)
 
 db = DBSCAN(eps=0.22, min_samples=1).fit(X)
 hdb = HDBSCAN(min_cluster_size=9).fit(X)
 labels = db.labels_
-
 
 
 # Number of clusters in labels, ignoring noise if present.

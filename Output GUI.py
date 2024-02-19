@@ -2,6 +2,7 @@ import tkinter as tk
 from PIL import Image, ImageDraw, ImageFont
 import cv2 , random , os
 import matplotlib.pyplot as plt 
+import numpy as np
 
 def open_second_window():
   second_window = tk.Toplevel(root)
@@ -38,6 +39,20 @@ def plot_points():
   plt.title ('Random Points on Canvas')
   plt.show()
 
+def plot_points_images():
+  image = plt.imread('c:/Users/Dante/Pictures/Nanoparticle Test/test_img.jpeg')
+  plt.imshow(image)
+  plt.axis('off')
+  num_points = 100
+  max_x, max_y = image.shape[1], image.shape[0]
+  random_x = np.random.randint(0 , max_x, size = num_points)
+  random_y = np.random.randint(0 , max_y, size = num_points)
+
+  plt.scatter(random_x, random_y, color ='red', s=10)
+
+  plt.show()
+
+
 def get_img_dim():
   image_path = 'c:/Users/Dante/Pictures/Nanoparticle Test/test_img.jpeg'
   image = Image.open(image_path)
@@ -63,6 +78,9 @@ show_canvas.pack(pady=10)
 plot_particles_button = tk.Button(root, text ="Plot NanoParticles", command= plot_points)
 plot_particles_button.pack(pady=10)
 
+plot_points_on_images = tk.Button(root, text ="Plot Points on Image", command= plot_points_images)
+plot_points_on_images.pack(pady=10)                     
+
 
 
 window_width = 400
@@ -74,3 +92,5 @@ y_coordinate = (screen_height/2) - (window_height/2)
 root.geometry(f"{window_width}x{window_height}+{int(x_coordinate)}+{int(y_coordinate)}")
 
 root.mainloop()
+
+

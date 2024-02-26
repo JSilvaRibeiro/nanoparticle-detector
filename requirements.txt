@@ -1,2 +1,6 @@
+numpy
+matplotlib
+scikit-learn
 opencv-python
 scikit-image
+Pillow

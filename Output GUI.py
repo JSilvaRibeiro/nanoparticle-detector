@@ -1,5 +1,5 @@
 import tkinter as tk
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageTk
 import cv2 , random , os
 import matplotlib.pyplot as plt 
 import numpy as np
@@ -60,10 +60,15 @@ def get_img_dim():
   print(f"Width : {width}, Height: {height}")
   black_image = Image.new("RGB", (width,height), "black")
   draw = ImageDraw.Draw(black_image)
-  image.show()
+  
+  photo = ImageTk.PhotoImage(image)
+  label = tk.Label(root, image = photo)
+  label.image= photo
+  label.pack()
+
+  """image.show()
   black_image.show()
-  size = image.size
-  return size
+  size = image.size"""
 
 
 root = tk.Tk()
